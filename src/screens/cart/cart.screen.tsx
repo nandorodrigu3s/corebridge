@@ -1,31 +1,39 @@
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import { Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Container } from "../../components/atoms/atm.containers/container.atm.styled";
+import { NothingHere } from "../../components/mols/mol.nothing-here/nothing-here.mol";
 import { CartNFTList } from "../../components/organ/organ.cart-nft-list/cart-nft-list.organ";
-import { NFTCardList } from "../../components/organ/organ.nft-list/nft-list.organ";
+import { CartContext } from "../../contexts";
 import { constData } from "../../system/constants";
-import { NFTData } from "../../system/interfaces/common.interfaces";
 
-export interface CartProps {
-  cartItems?: NFTData[];
-}
+// export interface CartProps {
+//   cartItems?: NFTData[];
+// }
 
-const Cart = (props: CartProps) => {
-  const { cartItems } = props;
+const Cart = () => {
+  const cartData = useContext(CartContext);
+  const { nfts } = cartData;
 
   return (
     <SafeAreaView>
       <Container hasPadding hasBorder>
-        <CartNFTList
-          cardsData={cartItems ?? constData}
-        />
+        {nfts?.length
+
+          ? <CartNFTList
+            cardsData={nfts ?? constData}
+          />
+          : <NothingHere
+              hideButton
+              title={"Nenhum item no carrinho"}
+            ></NothingHere>
+        }
       </Container>
     </SafeAreaView>
   );
 };
 
-export default Cart;
+export default React.memo(Cart);
 
 
 // const pressCard = (item: NFTData) => {

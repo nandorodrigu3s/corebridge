@@ -1,6 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { FlatList } from "react-native";
+import { CartContext } from "../../../contexts";
 import { NFTData } from "../../../system/interfaces/common.interfaces";
 import { NFTCard } from "../../mols/nft-card/nft-card.mol";
 
@@ -13,6 +14,7 @@ interface NFTCardListComponentProps {
 export const NFTCardList = (props: NFTCardListComponentProps) => {
   const { onPressCard, onPressAddCart, cardsData } = props;
   const navigating = useNavigation();
+  const { addCartData, removeCartData } = useContext(CartContext);
 
   const pressCard = (item: NFTData) => {
     navigating.navigate(
@@ -27,7 +29,7 @@ export const NFTCardList = (props: NFTCardListComponentProps) => {
   const renderCards = (({ item }) => {
     return (
       <NFTCard
-        onPressAddCart={onPressAddCart}
+        onPressAddCart={() => addCartData(item)}
         onPress={onPressCard ? onPressCard : () => pressCard(item)}
         nft={item}
       />

@@ -13,11 +13,13 @@ import { TouchableOpacity } from "react-native";
 interface NFTCardProps {
   onPress?: () => void;
   onPressAddCart?: () => void;
+  onPressRemoveCart?: () => void;
   nft: NFTData;
   hidePrice?: boolean;
   hideDescription?: boolean;
-  hideButton?: boolean;
+  hideAddButton?: boolean;
   disabled?: boolean;
+  showRemoveButton?: boolean;
 }
 
 export const NFTCard = (props: NFTCardProps) => {
@@ -26,8 +28,10 @@ export const NFTCard = (props: NFTCardProps) => {
     onPress,
     disabled,
     hidePrice,
-    hideButton,
+    hideAddButton,
     onPressAddCart,
+    onPressRemoveCart,
+    showRemoveButton,
     hideDescription,
   } = props;
 
@@ -49,10 +53,17 @@ export const NFTCard = (props: NFTCardProps) => {
           <NFTCardText>{nft?.collection?.name}</NFTCardText>
           {!hideDescription && <NFTCardText>{nft.description}</NFTCardText>}
           {!hidePrice && <NFTCardText>{nft.num_sales}</NFTCardText>}
-          { !hideButton &&
+          { !hideAddButton &&
             <AddCartContainer hasPadding>
                 <AddCartButton onPress={onPressAddCart}>
                   <AddCartButtonText>{"Add to cart"}</AddCartButtonText>
+                </AddCartButton>
+            </AddCartContainer>
+          }
+          { showRemoveButton &&
+            <AddCartContainer hasPadding>
+                <AddCartButton bgColor={"#E13000"} onPress={onPressRemoveCart}>
+                  <AddCartButtonText>{"Remove to cart"}</AddCartButtonText>
                 </AddCartButton>
             </AddCartContainer>
           }

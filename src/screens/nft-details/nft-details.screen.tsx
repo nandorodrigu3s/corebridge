@@ -1,9 +1,10 @@
-import React, { useState,  } from "react";
+import React, { useContext, useState,  } from "react";
 import { Dimensions, Linking } from "react-native";
 import { AddCartButtonText } from "../../components/atoms/atm.cart-button/add-cart-button-text.atm.styled";
 import { AddCartButton } from "../../components/atoms/atm.cart-button/add-cart-button.atm.styled";
 import { Container } from "../../components/atoms/atm.containers/container.atm.styled";
 import { NFTImage } from "../../components/atoms/atm.nft/nft-image.atm";
+import { CartContext } from "../../contexts";
 import { NFTData } from "../../system/interfaces/common.interfaces";
 import { DetailsButtonsContainer, DetailsScreenContent, NFTDetailsText } from "./nft-details.styled";
 
@@ -15,7 +16,8 @@ interface NFTDetailsProps {
 const NFTDetails = (props: NFTDetailsProps) => {
   const { width } = Dimensions.get("screen");
   const imageSourceWidth = (width * 0.60);
-  const { nft } = props.route.params;
+  const { nft } = props.route.params || {};
+  const { addCartData } = useContext(CartContext);
   return (
     <Container addFlex>
       <DetailsScreenContent paddingValue={8}>
@@ -47,7 +49,7 @@ const NFTDetails = (props: NFTDetailsProps) => {
           <NFTDetailsText noCenter>{nft?.description}</NFTDetailsText>
         </DetailsScreenContent>
         <DetailsButtonsContainer hasBorder hasPadding>
-          <AddCartButton onPress={() => {}}>
+          <AddCartButton onPress={() => addCartData(nft)}>
             <AddCartButtonText>{"Add to cart"}</AddCartButtonText>
           </AddCartButton>
           <AddCartButton bgColor="#1E75CC" onPress={() => Linking.openURL(nft.permalink)}>
