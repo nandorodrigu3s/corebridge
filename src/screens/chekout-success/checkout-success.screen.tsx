@@ -2,11 +2,10 @@ import React from "react";
 import { Dimensions } from "react-native";
 import { Container } from "../../components/atoms/atm.containers/container.atm.styled";
 import { AppImage } from "../../components/atoms/atm.image/image.atm";
-import { NFTImage } from "../../components/atoms/atm.nft/nft-image.atm";
 import { CheckoutSuccessContent, CheckoutSuccessText } from "./checkout-success.styled";
 
 import AppImageResource from '../../assets/images';
-import { NavigateButton, NavigateButtonHL } from "../../components/atoms/atm.navigation-button/navigate-button.atm.styled";
+import { NavigateButtonHL } from "../../components/atoms/atm.navigation-button/navigate-button.atm.styled";
 import { NavigateButtonHLText } from "../../components/atoms/atm.navigation-button/navigate-button-text.atm.styled";
 
 
