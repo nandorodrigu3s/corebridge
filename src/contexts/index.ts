@@ -12,16 +12,16 @@ export interface CartData {
 }
 
 export interface ICartContext {
-  addCartData: (nftData: NFTData) => void;
-  removeCartData: (nftData: NFTData) => void
+  addCartData: (nftData: NFTData, successCallback?: () => void) => void;
+  removeCartData: (nftData: NFTData, successCallback?: () => void) => void
 }
 
 // Cart context, default to light theme
 export const CartContext = createContext<CartData & ICartContext>({
   nfts: [],
   inCartCount: 0,
-  addCartData: (nftData: NFTData) => {},
-  removeCartData: (nftData: NFTData) => {}
+  addCartData: (nftData: NFTData, successCallback?: () => void) => {},
+  removeCartData: (nftData: NFTData, successCallback?: () => void) => {}
 });
 
 // Signed-in user context

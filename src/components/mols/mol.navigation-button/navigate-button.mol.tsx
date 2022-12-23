@@ -13,11 +13,15 @@ interface NavigateButtonComponentProps {
   hidePadding?: boolean;
 }
 
+interface AppRouteParams {
+  [key: string]: any;
+}
+
 export const NavigateButtonComponent = (props: NavigateButtonComponentProps) => {
   const navigation = useNavigation();
   const { label, onPress, routeName, params, color, hidePadding } = props;
 
-  const navigateTo = (route?: string, param?: any) => {
+  const navigateTo = (route?: string, param?: AppRouteParams) => {
     navigation.navigate({ name: route, param } as never);
   }
 

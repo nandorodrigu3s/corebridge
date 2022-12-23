@@ -11,10 +11,11 @@ interface NFTImageProps {
 
 export const NFTImage = (props: NFTImageProps) => {
   return (
-    <ImageStyled 
+    <ImageStyled
       source={{uri: props.source}}
       imgWidth={props.sourceWidth}
       imgHeight={props.sourceHeight}
+      circle={props.circle}
     />
   );
 }

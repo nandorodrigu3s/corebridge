@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { Text } from "react-native";
-import { AddCartButton } from "../../atoms/atm.cart-button/add-cart-button.atm.styled";
-import { AddCartButtonText } from "../../atoms/atm.cart-button/add-cart-button-text.atm.styled";
+import { CartButton } from "../../atoms/atm.cart-button/cart-button.atm.styled";
+import { CartButtonText } from "../../atoms/atm.cart-button/button-text.atm.styled";
 
 interface NavHighlightButtonComponentProps {
   label: string;
@@ -21,11 +21,11 @@ export const NavHighlightButtonComponent = (props: NavHighlightButtonComponentPr
   }
 
   return (
-    <AddCartButton
+    <CartButton
       onPress={onPress ? onPress : () => navigateTo(routeName, params)}
       color={color}
     >
-      <AddCartButtonText color={color}>{label}</AddCartButtonText>
-    </AddCartButton>
+      <CartButtonText color={color}>{label}</CartButtonText>
+    </CartButton>
   )
 }

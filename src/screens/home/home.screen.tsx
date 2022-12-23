@@ -7,7 +7,7 @@ import { constData } from "../../system/constants";
 
 const Home = () => {
   const onPress = () => {
-    Alert.alert("estoy aqui");
+    console.log("estoy aqui");
   }
 
   return (

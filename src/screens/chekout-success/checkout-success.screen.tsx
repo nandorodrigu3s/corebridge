@@ -7,9 +7,11 @@ import { CheckoutSuccessContent, CheckoutSuccessText } from "./checkout-success.
 import AppImageResource from '../../assets/images';
 import { NavigateButtonHL } from "../../components/atoms/atm.navigation-button/navigate-button.atm.styled";
 import { NavigateButtonHLText } from "../../components/atoms/atm.navigation-button/navigate-button-text.atm.styled";
+import { useNavigation } from "@react-navigation/native";
 
 
-const CheckoutSuccess = (props) => {
+const CheckoutSuccess = () => {
+  const navigation = useNavigation()
   const { width } = Dimensions.get("screen");
   const imageSourceWidth = (width * 0.75);
   return (
@@ -31,7 +33,7 @@ const CheckoutSuccess = (props) => {
         <CheckoutSuccessContent paddingValue={36}>
           <NavigateButtonHL
             bgColor="#E3B011"
-            onPress={() => props.navigation.navigate("Home")}
+            onPress={() => navigation.navigate({name: "Home", params: {}} as never)}
           >
             <NavigateButtonHLText>
               {"Back to Home"}
@@ -44,11 +46,3 @@ const CheckoutSuccess = (props) => {
 }
 
 export default CheckoutSuccess;
-
-// const pressCard = (item: NFTData) => {
-//   navigating.navigate(
-//     {
-//       name: "CheckoutSuccess",
-//       params: {}
-//   } as never)
-// }

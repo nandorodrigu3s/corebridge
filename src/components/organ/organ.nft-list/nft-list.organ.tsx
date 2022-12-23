@@ -8,7 +8,7 @@ import { NFTCard } from "../../mols/nft-card/nft-card.mol";
 interface NFTCardListComponentProps {
   cardsData?: NFTData[];
   onPressCard?: () => void;
-  onPressAddCart: () => void;
+  onPressAddCart?: () => void;
 }
 
 export const NFTCardList = (props: NFTCardListComponentProps) => {
@@ -29,9 +29,10 @@ export const NFTCardList = (props: NFTCardListComponentProps) => {
   const renderCards = (({ item }) => {
     return (
       <NFTCard
-        onPressAddCart={() => addCartData(item)}
-        onPress={onPressCard ? onPressCard : () => pressCard(item)}
+        onPressAddCart={onPressAddCart}
+        onPress={() => pressCard(item)}
         nft={item}
+        circle
       />
     );
   });

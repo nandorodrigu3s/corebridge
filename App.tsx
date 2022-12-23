@@ -7,7 +7,7 @@ import NFTDetails from "./src/screens/nft-details/nft-details.screen";
 import MyTabs from "./AppTabs";
 import UserProvider from "./src/contexts/user.context-provider";
 import CartProvider from "./src/contexts/cart.context-provider";
-
+import Toast from "react-native-toast-message";
 
 const Stack = createNativeStackNavigator();
 
@@ -24,13 +24,17 @@ const App = () => {
                 headerShown: false,
               }}
             ></Stack.Screen>
-            <Stack.Screen component={NFTDetails} name="NFTDetails"></Stack.Screen>
+            <Stack.Screen
+              component={NFTDetails}
+              name="NFTDetails"
+            ></Stack.Screen>
             <Stack.Screen
               options={{ headerShown: false }}
               component={CheckoutSuccess}
               name="CheckoutSuccess"
             ></Stack.Screen>
           </Stack.Navigator>
+          <Toast />
         </CartProvider>
       </UserProvider>
     </NavigationContainer>

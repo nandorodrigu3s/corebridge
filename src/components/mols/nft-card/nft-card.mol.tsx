@@ -1,14 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
 import { NFTCardContainer, NFTCardContent } from "../../atoms/atm.containers/nft-card-container.atm.styled";
 import { AddCartContainer } from "../../atoms/atm.containers/add-cart-container.atm.styled";
-import { AddCartButton } from "../../atoms/atm.cart-button/add-cart-button.atm.styled";
-import { AddCartButtonText } from "../../atoms/atm.cart-button/add-cart-button-text.atm.styled";
 import { NFTImage } from "../../atoms/atm.nft/nft-image.atm";
-import ImageSources from "../../../assets/images";
 import { NFTCardText } from "../../atoms/atm.nft-card/card-text.atm.styled";
 import { NFTData } from "../../../system/interfaces/common.interfaces";
-import { NavigateButton } from "../../atoms/atm.navigation-button/navigate-button.atm.styled";
 import { TouchableOpacity } from "react-native";
+import { CartContext } from "../../../contexts";
+import { CartButton } from "../../atoms/atm.cart-button/cart-button.atm.styled";
+import { CartButtonText } from "../../atoms/atm.cart-button/button-text.atm.styled";
 
 interface NFTCardProps {
   onPress?: () => void;
@@ -20,6 +19,7 @@ interface NFTCardProps {
   hideAddButton?: boolean;
   disabled?: boolean;
   showRemoveButton?: boolean;
+  circle?: boolean;
 }
 
 export const NFTCard = (props: NFTCardProps) => {
@@ -33,15 +33,18 @@ export const NFTCard = (props: NFTCardProps) => {
     onPressRemoveCart,
     showRemoveButton,
     hideDescription,
+    circle
   } = props;
+  
+  const { addCartData, removeCartData } = useContext(CartContext);
 
   return (
     <TouchableOpacity disabled={disabled} onPress={onPress}>
-      <NFTCardContainer hasBorder noPadding>
+      <NFTCardContainer hasBorder>
         <NFTCardContent paddingValue={8} hasBorder>
-          <NFTImage source={nft.image_url}/>
+          <NFTImage circle={circle} source={nft.image_url} />
         </NFTCardContent>
-        <NFTCardContent>
+        <NFTCardContent noPadding>
           <NFTCardContent paddingValue={12} hasBorder>
             <NFTCardText
               fontSize={24}
@@ -52,19 +55,30 @@ export const NFTCard = (props: NFTCardProps) => {
           </NFTCardContent>
           <NFTCardText>{nft?.collection?.name}</NFTCardText>
           {!hideDescription && <NFTCardText>{nft.description}</NFTCardText>}
-          {!hidePrice && <NFTCardText>{nft.num_sales}</NFTCardText>}
+          {!hidePrice && <NFTCardText isBold>{nft.price.label}</NFTCardText>}
           { !hideAddButton &&
             <AddCartContainer hasPadding>
-                <AddCartButton onPress={onPressAddCart}>
-                  <AddCartButtonText>{"Add to cart"}</AddCartButtonText>
-                </AddCartButton>
+                <CartButton
+                  onPress={() => {
+                    onPressAddCart && onPressAddCart();
+                    addCartData(nft);
+                  }}
+                >
+                  <CartButtonText>{"Add to cart"}</CartButtonText>
+                </CartButton>
             </AddCartContainer>
           }
           { showRemoveButton &&
             <AddCartContainer hasPadding>
-                <AddCartButton bgColor={"#E13000"} onPress={onPressRemoveCart}>
-                  <AddCartButtonText>{"Remove to cart"}</AddCartButtonText>
-                </AddCartButton>
+                <CartButton
+                  bgColor={"#E13000"}
+                  onPress={() => {
+                    onPressRemoveCart && onPressRemoveCart();
+                    removeCartData(nft);
+                  }}
+                >
+                  <CartButtonText>{"Remove"}</CartButtonText>
+                </CartButton>
             </AddCartContainer>
           }
         </NFTCardContent>

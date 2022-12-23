@@ -1,3 +1,4 @@
+import { useNavigation } from "@react-navigation/native";
 import React, { useState, useContext } from "react";
 import { FlatList } from "react-native";
 import { CartContext } from "../../../contexts";
@@ -9,19 +10,27 @@ interface CartNFTListComponentProps {
 }
 
 export const CartNFTList = (props: CartNFTListComponentProps) => {
-  const { cardsData } = props;
   const { removeCartData } = useContext(CartContext);
-
+  const navigating = useNavigation();
+  const { cardsData } = props;
+  const onPressCard = (item: NFTData) => {
+    navigating.navigate(
+      {
+        name: "NFTDetails",
+        params: {
+          nft: item
+        }
+    } as never)
+  }
   const renderCards = (({ item }) => {
     return (
       <>
         <NFTCard
           nft={item}
-          disabled={true}
           onPressRemoveCart={() => removeCartData(item)}
+          onPress={() => onPressCard(item)}
           hideDescription
           hideAddButton
-          hidePrice
           showRemoveButton
         />
       </>

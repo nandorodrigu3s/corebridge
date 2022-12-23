@@ -20,5 +20,6 @@ export const NFTCardContainer = styled.View<NFTCardContainerProps>`
 `;
 
 export const NFTCardContent = styled(NFTCardContainer)`
-  flex-direction: column
+  flex-direction: column;
+  overflow: hidden;
 `;
