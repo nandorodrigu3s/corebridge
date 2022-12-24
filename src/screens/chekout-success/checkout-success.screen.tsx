@@ -1,47 +1,21 @@
-import React from "react";
-import { Dimensions } from "react-native";
-import { Container } from "../../components/atoms/atm.containers/container.atm.styled";
-import { AppImage } from "../../components/atoms/atm.image/image.atm";
-import { CheckoutSuccessContent, CheckoutSuccessText } from "./checkout-success.styled";
-
-import AppImageResource from '../../assets/images';
-import { NavigateButtonHL } from "../../components/atoms/atm.navigation-button/navigate-button.atm.styled";
-import { NavigateButtonHLText } from "../../components/atoms/atm.navigation-button/navigate-button-text.atm.styled";
-import { useNavigation } from "@react-navigation/native";
-
+import React, { useContext, useEffect } from "react";
+import { NothingHere as CheckoutSuccessComponent } from "../../components/mols/mol.nothing-here/nothing-here.mol";
+import { CartContext } from "../../contexts";
 
 const CheckoutSuccess = () => {
-  const navigation = useNavigation()
-  const { width } = Dimensions.get("screen");
-  const imageSourceWidth = (width * 0.75);
+
+  const { clearCartData } = useContext(CartContext);
+
+  useEffect(() => {
+    clearCartData();
+  },[]);
+
   return (
-    <Container addFlex>
-      <CheckoutSuccessContent paddingValue={8}>
-        <CheckoutSuccessContent paddingValue={12} hasBorder>
-          <CheckoutSuccessText
-            fontSize={24}
-            isBold
-          >{"Compra realizada com sucesso"}</CheckoutSuccessText>
-        </CheckoutSuccessContent>
-        <CheckoutSuccessContent>
-          <AppImage 
-            source={`${AppImageResource.eistein}`}
-            sourceWidth={(imageSourceWidth).toString()}
-            sourceHeight={(imageSourceWidth).toString()}
-          />
-        </CheckoutSuccessContent>
-        <CheckoutSuccessContent paddingValue={36}>
-          <NavigateButtonHL
-            bgColor="#E3B011"
-            onPress={() => navigation.navigate({name: "Home", params: {}} as never)}
-          >
-            <NavigateButtonHLText>
-              {"Back to Home"}
-            </NavigateButtonHLText>
-          </NavigateButtonHL>
-        </CheckoutSuccessContent>
-      </CheckoutSuccessContent>
-    </Container>
+    <CheckoutSuccessComponent
+      title="Compra realizada com sucesso"
+      routeName="HomeTab"
+      hasBorder
+    />
   )
 }
 

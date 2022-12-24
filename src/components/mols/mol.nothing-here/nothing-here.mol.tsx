@@ -1,5 +1,4 @@
 import React from "react";
-import { CheckoutSuccessContent, CheckoutSuccessText } from "../../../screens/chekout-success/checkout-success.styled";
 import { Container } from "../../atoms/atm.containers/container.atm.styled";
 import { AppImage } from "../../atoms/atm.image/image.atm";
 import { NavigateButtonHLText } from "../../atoms/atm.navigation-button/navigate-button-text.atm.styled";
@@ -7,6 +6,7 @@ import { NavigateButtonHL } from "../../atoms/atm.navigation-button/navigate-but
 import AppImageResource from '../../../assets/images'
 import { Dimensions } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { NothingHereContent, NothingHereText } from "./nothing-here.mol.styled";
 
 interface NothingHereProps {
   title: string;
@@ -14,6 +14,7 @@ interface NothingHereProps {
   routeName?: string;
   params?: any
   hideButton?: boolean;
+  hasBorder?: boolean;
 }
 export const NothingHere = (props: NothingHereProps) => {
   const navigation = useNavigation()
@@ -21,23 +22,23 @@ export const NothingHere = (props: NothingHereProps) => {
   const imageSourceWidth = (width * 0.75);
   
   return (
-    <Container containerHeight={100} justifyCon>
-      <CheckoutSuccessContent paddingValue={8}>
-        <CheckoutSuccessContent paddingValue={12} hasBorder>
-          <CheckoutSuccessText
+    <Container containerHeight={100} justifyCon hasBorder={props.hasBorder}>
+      <NothingHereContent paddingValue={8}>
+        <NothingHereContent paddingValue={12} hasBorder>
+          <NothingHereText
             fontSize={24}
             isBold
-          >{props.title}</CheckoutSuccessText>
-        </CheckoutSuccessContent>
-        <CheckoutSuccessContent>
-          <AppImage 
+          >{props.title}</NothingHereText>
+        </NothingHereContent>
+        <NothingHereContent>
+          <AppImage
             source={`${AppImageResource.eistein}`}
             sourceWidth={(imageSourceWidth).toString()}
             sourceHeight={(imageSourceWidth).toString()}
           />
-        </CheckoutSuccessContent>
+        </NothingHereContent>
         { !props.hideButton &&
-          <CheckoutSuccessContent paddingValue={36}>
+          <NothingHereContent paddingValue={36}>
             <NavigateButtonHL
               bgColor="#E3B011"
               onPress={() => navigation.navigate(
@@ -51,9 +52,9 @@ export const NothingHere = (props: NothingHereProps) => {
                 {`Back to ${props.routeName}`}
               </NavigateButtonHLText>
             </NavigateButtonHL>
-          </CheckoutSuccessContent>
+          </NothingHereContent>
         }
-      </CheckoutSuccessContent>
+      </NothingHereContent>
     </Container>
   )
 }

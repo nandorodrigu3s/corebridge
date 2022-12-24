@@ -1,15 +1,15 @@
 import styled from "styled-components/native";
 
-interface LoginSubmitButtonTextProps {
+interface SubmitButtonTextProps {
   color?: string;
   fontSize?: number;
 }
 
-export const LoginSubmitButtonText = styled.Text<LoginSubmitButtonTextProps>`
+export const SubmitButtonText = styled.Text<SubmitButtonTextProps>`
   text-transform: uppercase;
   font-weight: bold;
   ${(props) => props.fontSize && `font-size: ${props.fontSize}px`};
-  color: ${(props: LoginSubmitButtonTextProps) => props.color
+  color: ${(props: SubmitButtonTextProps) => props.color
     ? `${props.color}`
     : '#FFF'};
 `;

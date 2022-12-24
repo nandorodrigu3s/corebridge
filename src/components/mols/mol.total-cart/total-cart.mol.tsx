@@ -3,10 +3,10 @@ import { CartTotalPurchaseText } from "../../atoms/atm.cart/cart-total-purchase-
 import { Container } from "../../atoms/atm.containers/container.atm.styled";
 
 interface TotalCartComponentProps {
+  totalPrice: string;
   bgColor?: string;
   totalTextColor?: string;
   valueTextColor?: string;
-  totalPrice: string;
 }
 export const TotalCartComponent = (props: TotalCartComponentProps) => {
   return (

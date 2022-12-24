@@ -1,12 +1,12 @@
 import React, { useContext, useState,  } from "react";
 import { Dimensions, Linking } from "react-native";
-import { Toast } from "react-native-toast-message/lib/src/Toast";
 import { CartButtonText } from "../../components/atoms/atm.cart-button/button-text.atm.styled";
 import { CartButton } from "../../components/atoms/atm.cart-button/cart-button.atm.styled";
 import { Container } from "../../components/atoms/atm.containers/container.atm.styled";
 import { NFTImage } from "../../components/atoms/atm.nft/nft-image.atm";
 import { CartContext } from "../../contexts";
 import { NFTData } from "../../system/interfaces/common.interfaces";
+import { showMessage } from "./nft-details.repository";
 import { DetailsButtonsContainer, DetailsScreenContent, NFTDetailsText } from "./nft-details.styled";
 
 
@@ -19,15 +19,6 @@ const NFTDetails = (props: NFTDetailsProps) => {
   const imageSourceWidth = (width * 0.60);
   const { nft } = props.route.params || {};
   const { addCartData } = useContext(CartContext);
-
-  const showMessage = () => {
-    const message = "NFT adicionado ao carrinho com sucesso!";
-    Toast.show({
-      type: 'success',
-      text1: 'Oops',
-      text2:  `${message}`
-    });
-  }
 
   return (
     <Container addFlex>

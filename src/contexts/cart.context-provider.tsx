@@ -40,8 +40,18 @@ function CartProvider({ children }: any) {
     successCallback && successCallback();
   }
 
+  const clearCartData = (successCallback?: () => void): void => {
+    const nfts: NFTData[] = [];
+    const counter = nfts.length;
+    setCartValues({
+      nfts,
+      inCartCount: counter
+    });
+    successCallback && successCallback();
+  }
+
   return (
-    <CartContext.Provider value={{...cartValues, ...{addCartData, removeCartData}}}>
+    <CartContext.Provider value={{...cartValues, ...{addCartData, removeCartData, clearCartData}}}>
       {children}
     </CartContext.Provider>
   )

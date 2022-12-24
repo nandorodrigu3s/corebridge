@@ -2,14 +2,13 @@ import React from "react";
 import { Alert, Dimensions, Text, TextInput, TouchableOpacity } from "react-native";
 import { Container } from "../../components/atoms/atm.containers/container.atm.styled";
 import { useForm, Controller } from "react-hook-form";
-import { SubmitLoginButton } from "../../components/atoms/atm.submit-button/submit-login-button.atm.styled";
-import { LoginSubmitButtonText } from "../../components/atoms/atm.submit-button/submit-login-button-text.atm.styled";
+import { SubmitButton } from "../../components/atoms/atm.submit-button/submit-button.atm.styled";
+import { SubmitButtonText } from "../../components/atoms/atm.submit-button/submit-button-text.atm.styled";
 import { LoginContainer } from "../../components/atoms/atm.containers/login-container.atm.styled";
 import { SubmitErrorText } from "../../components/atoms/atm.submit-button/submit-error-text.atm.styled";
 import { AppImage } from "../../components/atoms/atm.image/image.atm";
 import AppImageResource from '../../assets/images';
 import { Akira } from 'react-native-textinput-effects';
-import Icon from "react-native-vector-icons/FontAwesome"
 import { InputPassword } from "../../components/organ/organ.password-input/password-input.organ";
 
 
@@ -81,32 +80,6 @@ const Login = () => {
           marginUp={4}
           marginDown={4}
         >
-          {/* <Controller
-            control={control}
-            rules={{
-              required: true,
-            }}
-            render={({ field: { onChange, value } }) => (
-              <>
-                <Akira
-                  onChangeText={onChange}
-                  secureTextEntry={true}
-                  value={value}
-                  label={'password'}
-                  // this is used as active and passive border color
-                  borderColor={'#000'}
-                  inputPadding={4}
-                  labelHeight={24}
-                  labelStyle={{ color: '#ac83c4' }}
-                />
-                <TouchableOpacity style={{position: "absolute", right: 0, backgroundColor: 'transparent'}}>
-                  <Icon onPress={() => Alert.alert('oi')} name="eye-slash" color={'#ac83c4'} size={18} />
-                </TouchableOpacity>
-              </>
-            )}
-            name="password"
-          />
-          {errors.password && <SubmitErrorText>This is required.</SubmitErrorText>} */}
           <InputPassword
             control={control}
             labelColor="#ac83c4"
@@ -121,15 +94,15 @@ const Login = () => {
         >
           
         </LoginContainer>
-        <SubmitLoginButton
+        <SubmitButton
           onPress={handleSubmit(onLogin)}
           buttonWidth={75}
-          hasPaddingLeft
+          alignIt
         >
-          <LoginSubmitButtonText fontSize={15}>
+          <SubmitButtonText fontSize={15}>
             Entrar
-          </LoginSubmitButtonText>
-        </SubmitLoginButton>
+          </SubmitButtonText>
+        </SubmitButton>
       </LoginContainer>
     </Container>
   )
