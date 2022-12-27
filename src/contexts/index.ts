@@ -4,6 +4,7 @@ import { NFTData } from "../system/interfaces/common.interfaces";
 export interface User {
   name: string;
   avatar_url: string;
+  isLogged: boolean;
 }
 
 export interface CartData {
@@ -29,7 +30,8 @@ export const CartContext = createContext<CartData & ICartContext>({
 // Signed-in user context
 export const UserContext = createContext<User>({
   name: '',
-  avatar_url: ''
+  avatar_url: '',
+  isLogged: false
 });
 
 

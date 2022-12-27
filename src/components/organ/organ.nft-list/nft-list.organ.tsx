@@ -6,15 +6,15 @@ import { NFTData } from "../../../system/interfaces/common.interfaces";
 import { NFTCard } from "../../mols/nft-card/nft-card.mol";
 
 interface NFTCardListComponentProps {
+  hideAddButton?: boolean;
   cardsData?: NFTData[];
   onPressCard?: () => void;
   onPressAddCart?: () => void;
 }
 
 export const NFTCardList = (props: NFTCardListComponentProps) => {
-  const { onPressCard, onPressAddCart, cardsData } = props;
+  const { onPressAddCart, cardsData, hideAddButton } = props;
   const navigating = useNavigation();
-  const { addCartData, removeCartData } = useContext(CartContext);
 
   const pressCard = (item: NFTData) => {
     navigating.navigate(
@@ -33,6 +33,7 @@ export const NFTCardList = (props: NFTCardListComponentProps) => {
         onPress={() => pressCard(item)}
         nft={item}
         circle
+        hideAddButton={hideAddButton}
       />
     );
   });

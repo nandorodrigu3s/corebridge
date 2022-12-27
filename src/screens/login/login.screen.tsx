@@ -64,8 +64,7 @@ const Login = () => {
                 onChangeText={onChange}
                 value={value}
                 label={'username'}
-                // this is used as active and passive border color
-                borderColor={'#000'}
+                borderColor={'#000'} // this is used as active and passive border color
                 inputPadding={4}
                 labelHeight={24}
                 labelStyle={{ color: '#ac83c4' }}

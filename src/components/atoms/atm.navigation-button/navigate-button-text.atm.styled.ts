@@ -1,11 +1,17 @@
 import styled from "styled-components/native";
 
 interface NavigateButtonTextProps {
+  transformText?: boolean;
+  fontWeight?: number | string;
   color?: string;
+  fontSize?: number;
 }
 
 export const NavigateButtonText = styled.Text<NavigateButtonTextProps>`
-  color: ${(props: NavigateButtonTextProps) => props.color ?? '#FFF'};
+  font-weight: ${(props: NavigateButtonTextProps) => props.fontWeight ?? 'bold;'};
+  color: ${(props: NavigateButtonTextProps) => props.color ?? '#FFF;'};
+  ${(props) => props.fontSize && `font-size: ${props.fontSize}px;`};
+  ${(props) => props.transformText && `text-transform: uppercase;`};
 `;
 
 interface NavigateButtonHLTextProps {

@@ -8,6 +8,8 @@ import MyTabs from "./AppTabs";
 import UserProvider from "./src/contexts/user.context-provider";
 import CartProvider from "./src/contexts/cart.context-provider";
 import Toast from "react-native-toast-message";
+import Login from "./src/screens/login/login.screen";
+import WalletDetails from "./src/screens/wallet-details/wallet-details.screen";
 
 const Stack = createNativeStackNavigator();
 
@@ -32,6 +34,14 @@ const App = () => {
               options={{ headerShown: false }}
               component={CheckoutSuccess}
               name="CheckoutSuccess"
+            ></Stack.Screen>
+            <Stack.Screen
+              name="Login"
+              component={Login}
+            ></Stack.Screen>
+            <Stack.Screen
+              name="WalletDetails"
+              component={WalletDetails}
             ></Stack.Screen>
           </Stack.Navigator>
           <Toast />
