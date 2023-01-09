@@ -1,3 +1,10 @@
+import { AuthData, User } from "../../graphql/types";
+
+export interface UserData extends User {}
+
+export interface UserAuthData extends AuthData {
+  wallet: NFTData[]
+}
 export interface NFTData {
   id: number;
   num_sales: number;

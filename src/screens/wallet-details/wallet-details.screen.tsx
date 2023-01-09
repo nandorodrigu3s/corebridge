@@ -14,15 +14,14 @@ const WalletDetails = (props: WalletDetailsProps) => {
   const onPress = () => {
     console.log("estoy aqui");
   }
-
   return (
     <SafeAreaView>
       <Container hasPadding hasBorder>
-        { props?.nfts && props?.nfts.length
+        { props?.route?.params?.nfts && props?.route?.params?.nfts?.length
           ?
             <NFTCardList
               onPressAddCart={onPress}
-              cardsData={constData}
+              cardsData={props?.route?.params?.nfts}
               hideAddButton
             />
           : <NothingHere hideButton title={"Ops... Nada por aqui"} />

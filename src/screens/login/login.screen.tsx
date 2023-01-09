@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Alert, Dimensions, Text, TextInput, TouchableOpacity } from "react-native";
 import { Container } from "../../components/atoms/atm.containers/container.atm.styled";
 import { useForm, Controller } from "react-hook-form";
@@ -10,7 +10,12 @@ import { AppImage } from "../../components/atoms/atm.image/image.atm";
 import AppImageResource from '../../assets/images';
 import { Akira } from 'react-native-textinput-effects';
 import { InputPassword } from "../../components/organ/organ.password-input/password-input.organ";
-
+import { useMutation } from "@apollo/client";
+import { loginMutation } from "../../graphql/mutations/login-mutation.graphql";
+import { UserContext } from "../../contexts";
+import { useNavigation } from "@react-navigation/native";
+import { UserAuthData } from "../../system/interfaces/common.interfaces";
+import Toast from "react-native-toast-message";
 
 type LoginFormData = {
   username: string;
@@ -20,7 +25,12 @@ type LoginFormData = {
 const Login = () => {
   const { width } = Dimensions.get("screen");
   const imageSourceWidth = (width * 0.75);
-
+  const [login, { data, loading, reset } ] = useMutation(loginMutation(['id', 'num_sales', 'category']), {
+    fetchPolicy: 'no-cache'
+  });
+  const { addUserData, token } = useContext(UserContext);
+  const navigation = useNavigation(); 
+  const [authResponse, setAuthResponse] = useState<UserAuthData>({} as UserAuthData);
   const { control, handleSubmit, formState: { errors } } = useForm<LoginFormData>({
     defaultValues: {
       username: '',
@@ -28,8 +38,36 @@ const Login = () => {
     }
   });
 
-  const onLogin = (data: LoginFormData) => {
-    console.log(data);
+  useEffect(() => {
+    authResponse?.token?.length && addUserData(authResponse);
+  }, [authResponse]);
+
+  if (!loading && !authResponse?.token?.length && data?.login) {
+    const { __typename, ...auth } = data?.login;
+    setAuthResponse(auth);
+    setTimeout(() => {
+      navigation.navigate({ name: 'Profile' } as never);
+    }, 3500);
+  }
+
+  const onLogin = async (formData: LoginFormData) => {
+    try {
+      await login({
+        variables: {
+          authInput: {
+            username: formData.username,
+            password: formData.password,
+          }
+        }
+      });
+    } catch (onLoginErr: any) {
+      Toast.show({
+        type: 'error',
+        text1: 'Oops',
+        text2:  `${onLoginErr.message}`
+      });
+      console.log(onLoginErr.message);
+    }
   }
 
   return (
