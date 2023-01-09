@@ -4,10 +4,12 @@ import { AddCartContainer } from "../../atoms/atm.containers/add-cart-container.
 import { NFTImage } from "../../atoms/atm.nft/nft-image.atm";
 import { NFTCardText } from "../../atoms/atm.nft-card/card-text.atm.styled";
 import { NFTData } from "../../../system/interfaces/common.interfaces";
-import { TouchableOpacity } from "react-native";
+import { Alert, TouchableOpacity } from "react-native";
 import { CartContext } from "../../../contexts";
 import { CartButton } from "../../atoms/atm.cart-button/cart-button.atm.styled";
 import { CartButtonText } from "../../atoms/atm.cart-button/button-text.atm.styled";
+import { useMutation, gql } from '@apollo/client';
+import { UpdateCartInput, UpdateCartType } from "../../../graphql/types";
 
 interface NFTCardProps {
   onPress?: () => void;
@@ -23,6 +25,15 @@ interface NFTCardProps {
 }
 
 export const NFTCard = (props: NFTCardProps) => {
+  const UPDATE_CART = gql`
+    mutation UpdateCart($updateCartInput: UpdateCartInput!) {
+      updateCart(updateCartInput: $updateCartInput) {
+        nfts { image_url name description permalink }
+      }
+    }
+  `;
+  const [addTodo, { data, loading, error }] = useMutation(UPDATE_CART);
+
   const { 
     nft,
     onPress,
@@ -59,9 +70,10 @@ export const NFTCard = (props: NFTCardProps) => {
           { !hideAddButton &&
             <AddCartContainer hasPadding>
                 <CartButton
-                  onPress={() => {
+                  onPress={async () => {
                     onPressAddCart && onPressAddCart();
                     addCartData(nft);
+                    addTodo({ variables: { nft, type: UpdateCartType.Add } });
                   }}
                 >
                   <CartButtonText>{"Add to cart"}</CartButtonText>

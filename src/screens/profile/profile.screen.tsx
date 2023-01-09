@@ -6,13 +6,13 @@ import { UserContext } from "../../contexts";
 interface ProfileProps {}
 
 const Profile = ({ navigation: { navigate } }) => {
-  const userContext = useContext(UserContext);
+  const user = useContext(UserContext);
   const onPressWallet = () => {
-    navigate("WalletDetails", {});
+    navigate("WalletDetails", { nfts: user?.nfts || [] });
   }
 
-  return ( userContext.isLogged 
-    ? <ProfileComponent countNFT={7} onPressWallet={onPressWallet}/> 
+  return ( user.isLogged 
+    ? <ProfileComponent countNFT={user.nfts?.length || 0} onPressWallet={onPressWallet}/> 
     : <NotLoggedInComponent />
   )
 };
