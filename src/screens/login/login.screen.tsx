@@ -12,9 +12,9 @@ import { Akira } from 'react-native-textinput-effects';
 import { InputPassword } from "../../components/organ/organ.password-input/password-input.organ";
 import { useMutation } from "@apollo/client";
 import { loginMutation } from "../../graphql/mutations/login-mutation.graphql";
-import { UserContext } from "../../contexts";
+import { BackdropContext, UserContext } from "../../contexts";
 import { useNavigation } from "@react-navigation/native";
-import { UserAuthData } from "../../system/interfaces/common.interfaces";
+import { NFTData, UserAuthData } from "../../system/interfaces/common.interfaces";
 import Toast from "react-native-toast-message";
 
 type LoginFormData = {
@@ -25,10 +25,8 @@ type LoginFormData = {
 const Login = () => {
   const { width } = Dimensions.get("screen");
   const imageSourceWidth = (width * 0.75);
-  const [login, { data, loading, reset } ] = useMutation(loginMutation(['id', 'num_sales', 'category']), {
-    fetchPolicy: 'no-cache'
-  });
-  const { addUserData, token } = useContext(UserContext);
+  const { addUserData } = useContext(UserContext);
+  const { setVisible } = useContext(BackdropContext);
   const navigation = useNavigation(); 
   const [authResponse, setAuthResponse] = useState<UserAuthData>({} as UserAuthData);
   const { control, handleSubmit, formState: { errors } } = useForm<LoginFormData>({
@@ -37,21 +35,28 @@ const Login = () => {
       password: '',
     }
   });
-
+  const [login, { data, loading, reset } ] = useMutation(loginMutation(['id', 'num_sales']), {
+    fetchPolicy: 'no-cache'
+  });
+  
   useEffect(() => {
-    authResponse?.token?.length && addUserData(authResponse);
+   if (!!authResponse?.token?.length) {
+      addUserData(authResponse);
+    }
   }, [authResponse]);
 
   if (!loading && !authResponse?.token?.length && data?.login) {
     const { __typename, ...auth } = data?.login;
     setAuthResponse(auth);
     setTimeout(() => {
+      setVisible(false);
       navigation.navigate({ name: 'Profile' } as never);
     }, 3500);
   }
 
   const onLogin = async (formData: LoginFormData) => {
     try {
+      setVisible(true);
       await login({
         variables: {
           authInput: {
@@ -61,12 +66,14 @@ const Login = () => {
         }
       });
     } catch (onLoginErr: any) {
-      Toast.show({
-        type: 'error',
-        text1: 'Oops',
-        text2:  `${onLoginErr.message}`
-      });
-      console.log(onLoginErr.message);
+      setTimeout(() => {
+        Toast.show({
+          type: 'error',
+          text1: 'Oops',
+          text2:  `${onLoginErr?.message}`
+        });
+        setVisible(false);
+      }, 2000);
     }
   }
 
@@ -135,6 +142,7 @@ const Login = () => {
           onPress={handleSubmit(onLogin)}
           buttonWidth={75}
           alignIt
+          disabled={!!authResponse?.token?.length}
         >
           <SubmitButtonText fontSize={15}>
             Entrar

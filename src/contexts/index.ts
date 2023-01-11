@@ -13,6 +13,12 @@ export interface CartData {
   nfts: NFTData[],
   inCartCount: number;
 }
+
+export interface CustomAppBackdrop {
+  visible: boolean;
+}
+
+
 //USER
 export interface IUserContext {
   addUserData: (userData: UserAuthData, successCallback?: () => void) => void;
@@ -36,7 +42,6 @@ export interface ICartContext {
   clearCartData: (successCallback?: () => void) => void;
 }
 
-// Cart context, default to light theme
 export const CartContext = createContext<CartData & ICartContext>({
   nfts: [],
   inCartCount: 0,
@@ -45,5 +50,14 @@ export const CartContext = createContext<CartData & ICartContext>({
   clearCartData: (successCallback?: () => void) => {},
 });
 
+//BACKDROP
+export interface ICustomBackdrop {
+  setVisible: (visible: boolean, successCallback?: () => void) => void;
+}
+
+export const BackdropContext = createContext<CustomAppBackdrop & ICustomBackdrop>({
+  visible: false,
+  setVisible: (visible: boolean, successCallback?: () => void) => {},
+});
 
 

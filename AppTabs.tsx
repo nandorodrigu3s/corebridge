@@ -2,9 +2,7 @@ import React, { useContext } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Home from "./src/screens/home/home.screen";
 import FontAweIcon from "react-native-vector-icons/FontAwesome";
-import FeatherIcon from "react-native-vector-icons/Feather";
 import Cart from "./src/screens/cart/cart.screen";
-import Login from "./src/screens/login/login.screen";
 import { CartContext } from "./src/contexts";
 import Profile from "./src/screens/profile/profile.screen";
 
