@@ -29,6 +29,3 @@ export const loginMutation = (params: string[] = []) => gql`
     }
   }
 `;
-// id
-// num_sales
-// category
