@@ -1,9 +1,19 @@
+import { UpdateCartType } from "../../graphql/types";
 import { NFTData } from "../../system/interfaces/common.interfaces";
 
 
-export const handleSubmitPayment = (successCallback?: () =>  void) => {
+export const handleSubmitPayment = (
+  submitParams: { [key: string]: any },
+  paymentCallback?: () =>  void
+) => {
   setTimeout(() => {
-    successCallback && successCallback();
+    if (!submitParams['isLogged']) {
+      submitParams['navigate']('Login', { routeName: 'Cart' })
+      paymentCallback && paymentCallback();
+      return;
+    }
+    submitParams['navigate']('CheckoutSuccess', {})
+    paymentCallback && paymentCallback();
   }, 2500);
 }
 
@@ -20,4 +30,13 @@ export const getPrices =  (toBuy: NFTData[]): string => {
     return price;
   }, 0);
   return formatter.format(price);
+}
+
+export const buildUpdatCartVariables = (type: UpdateCartType, nft: NFTData) => {
+  return {
+    updateCart: {
+      nft,
+      type
+    }
+  };
 }

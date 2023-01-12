@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { NFTCardContainer, NFTCardContent } from "../../atoms/atm.containers/nft-card-container.atm.styled";
 import { AddCartContainer } from "../../atoms/atm.containers/add-cart-container.atm.styled";
 import { NFTImage } from "../../atoms/atm.nft/nft-image.atm";
@@ -10,6 +10,8 @@ import { CartButton } from "../../atoms/atm.cart-button/cart-button.atm.styled";
 import { CartButtonText } from "../../atoms/atm.cart-button/button-text.atm.styled";
 import { useMutation, gql } from '@apollo/client';
 import { UpdateCartInput, UpdateCartType } from "../../../graphql/types";
+import { updateCartMutation } from "../../../graphql/mutations/update-cart.mutation.graphql";
+import { buildUpdatCartVariables } from "../../../screens/cart/cart.repository";
 
 interface NFTCardProps {
   onPress?: () => void;
@@ -25,15 +27,6 @@ interface NFTCardProps {
 }
 
 export const NFTCard = (props: NFTCardProps) => {
-  const UPDATE_CART = gql`
-    mutation UpdateCart($updateCartInput: UpdateCartInput!) {
-      updateCart(updateCartInput: $updateCartInput) {
-        nfts { image_url name description permalink }
-      }
-    }
-  `;
-  const [addTodo, { data, loading, error }] = useMutation(UPDATE_CART);
-
   const { 
     nft,
     onPress,
@@ -46,9 +39,25 @@ export const NFTCard = (props: NFTCardProps) => {
     hideDescription,
     circle
   } = props;
-  
+  const [updateCart, { data, loading, error, client }] = useMutation(updateCartMutation());
+  const { nfts } = useContext(CartContext);
+  const [storeUpdateValue, setStoreUpdateValue] = useState<UpdateCartInput>({} as UpdateCartInput);
   const { addCartData, removeCartData } = useContext(CartContext);
 
+  if (storeUpdateValue?.type && error) {
+    setTimeout(() => {
+      if (storeUpdateValue.type === UpdateCartType.Remove) {
+        addCartData(nft);
+      } else {
+        removeCartData(nft);
+      }
+    }, 800);
+    setStoreUpdateValue({} as UpdateCartInput);
+  }
+
+  useEffect(() => {
+    console.log(client);
+  })
   return (
     <TouchableOpacity disabled={disabled} onPress={onPress}>
       <NFTCardContainer hasBorder>
@@ -72,8 +81,11 @@ export const NFTCard = (props: NFTCardProps) => {
                 <CartButton
                   onPress={async () => {
                     onPressAddCart && onPressAddCart();
-                    addCartData(nft);
-                    addTodo({ variables: { nft, type: UpdateCartType.Add } });
+                    addCartData(nft, async () => {
+                      const variables = buildUpdatCartVariables(UpdateCartType.Add, nft);
+                      setStoreUpdateValue(variables.updateCart);
+                      await updateCart({ variables });
+                    });
                   }}
                 >
                   <CartButtonText>{"Add to cart"}</CartButtonText>
@@ -86,7 +98,11 @@ export const NFTCard = (props: NFTCardProps) => {
                   bgColor={"#E13000"}
                   onPress={() => {
                     onPressRemoveCart && onPressRemoveCart();
-                    removeCartData(nft);
+                    const variables = buildUpdatCartVariables(UpdateCartType.Remove, nft);
+                    removeCartData(nft, async () => {
+                      setStoreUpdateValue(variables.updateCart);
+                      await updateCart({ variables });
+                    });
                   }}
                 >
                   <CartButtonText>{"Remove"}</CartButtonText>

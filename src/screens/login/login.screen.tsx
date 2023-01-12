@@ -11,18 +11,21 @@ import AppImageResource from '../../assets/images';
 import { Akira } from 'react-native-textinput-effects';
 import { InputPassword } from "../../components/organ/organ.password-input/password-input.organ";
 import { useMutation } from "@apollo/client";
-import { loginMutation } from "../../graphql/mutations/login-mutation.graphql";
+import { loginMutation } from "../../graphql/mutations/login.mutation.graphql";
 import { BackdropContext, UserContext } from "../../contexts";
 import { useNavigation } from "@react-navigation/native";
 import { NFTData, UserAuthData } from "../../system/interfaces/common.interfaces";
 import Toast from "react-native-toast-message";
 
+interface LoginProps {
+  routeName?: string;
+}
 type LoginFormData = {
   username: string;
   password: string;
 }
 
-const Login = () => {
+const Login = React.memo((props: LoginProps) => {
   const { width } = Dimensions.get("screen");
   const imageSourceWidth = (width * 0.75);
   const { addUserData } = useContext(UserContext);
@@ -35,7 +38,7 @@ const Login = () => {
       password: '',
     }
   });
-  const [login, { data, loading, reset } ] = useMutation(loginMutation(['id', 'num_sales']), {
+  const [login, { data, loading, error , reset } ] = useMutation(loginMutation(['id', 'num_sales']), {
     fetchPolicy: 'no-cache'
   });
   
@@ -50,7 +53,7 @@ const Login = () => {
     setAuthResponse(auth);
     setTimeout(() => {
       setVisible(false);
-      navigation.navigate({ name: 'Profile' } as never);
+      navigation.navigate({ name: props?.route?.params?.routeName || 'Profile' } as never);
     }, 3500);
   }
 
@@ -70,7 +73,7 @@ const Login = () => {
         Toast.show({
           type: 'error',
           text1: 'Oops',
-          text2:  `${onLoginErr?.message}`
+          text2:  `${error?.message}`
         });
         setVisible(false);
       }, 2000);
@@ -151,7 +154,7 @@ const Login = () => {
       </LoginContainer>
     </Container>
   )
-};
+});
 
 
 export default Login;

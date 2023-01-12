@@ -26,7 +26,7 @@ export const NFTCardList = (props: NFTCardListComponentProps) => {
     } as never)
   }
 
-  const renderCards = (({ item }) => {
+  const renderCards = (({ item }: any) => {
     return (
       <NFTCard
         onPressAddCart={onPressAddCart}

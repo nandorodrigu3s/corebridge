@@ -12,7 +12,6 @@ import WalletDetails from "./src/screens/wallet-details/wallet-details.screen";
 import { ApolloAuthProvider } from "./ApolloAuthProvider";
 import BackdropProvider from "./src/contexts/custom-backdrop.context-provider";
 import { AppCustomBackdrop } from "./src/components/mols/mol.backdrop/app-backdrop.mol";
-import { AppBackdrop } from "./src/components/atoms/atm.backdrop/app-backdrop.atm.styled";
 
 const Stack = createNativeStackNavigator();
 

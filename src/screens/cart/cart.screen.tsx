@@ -9,7 +9,7 @@ import { SubmitButton } from "../../components/atoms/atm.submit-button/submit-bu
 import { NothingHere } from "../../components/mols/mol.nothing-here/nothing-here.mol";
 import { TotalCartComponent } from "../../components/mols/mol.total-cart/total-cart.mol";
 import { CartNFTList } from "../../components/organ/organ.cart-nft-list/cart-nft-list.organ";
-import { CartContext } from "../../contexts";
+import { CartContext, UserContext } from "../../contexts";
 import { getPrices, handleSubmitPayment } from "./cart.repository";
 
 
@@ -17,7 +17,8 @@ const Cart = () => {
   const [totalPrice, setTotalPrice] = useState<string>('0');
   const [loadingButton, setLoadingButton] = useState(false);
   const cartData = useContext(CartContext);
-  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
+  const  { isLogged } = useContext(UserContext);
+  const { navigate } = useNavigation<NativeStackNavigationProp<ParamListBase>>();
   const { nfts } = cartData;
   useEffect(() => {
     const totalPrice = getPrices(nfts);
@@ -39,14 +40,11 @@ const Cart = () => {
               <SubmitButton
                 onPress={() => {
                   setLoadingButton(true);
-                  handleSubmitPayment(
-                    () => {
+                  handleSubmitPayment({ isLogged, navigate }, () => {
                       setLoadingButton(false);
-                      navigation.navigate({name: "CheckoutSuccess", params: {}} as never);
                     }
                   );
-                } 
-                }
+                }}
                 buttonWidth={75}
                 alignIt
               >

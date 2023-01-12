@@ -22,7 +22,7 @@ export const CartNFTList = (props: CartNFTListComponentProps) => {
         }
     } as never)
   }
-  const renderCards = (({ item }) => {
+  const renderCards = (({ item }: any) => {
     return (
       <>
         <NFTCard
