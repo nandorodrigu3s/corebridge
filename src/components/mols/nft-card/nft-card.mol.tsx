@@ -11,7 +11,7 @@ import { CartButtonText } from "../../atoms/atm.cart-button/button-text.atm.styl
 import { useMutation, gql } from '@apollo/client';
 import { UpdateCartInput, UpdateCartType } from "../../../graphql/types";
 import { updateCartMutation } from "../../../graphql/mutations/update-cart.mutation.graphql";
-import { buildUpdatCartVariables } from "../../../screens/cart/cart.repository";
+import { buildUpdatCartVariables, showMessage } from "../../../screens/cart/cart.repository";
 
 interface NFTCardProps {
   onPress?: () => void;
@@ -27,7 +27,7 @@ interface NFTCardProps {
 }
 
 export const NFTCard = (props: NFTCardProps) => {
-  const { 
+  const {
     nft,
     onPress,
     disabled,
@@ -39,25 +39,9 @@ export const NFTCard = (props: NFTCardProps) => {
     hideDescription,
     circle
   } = props;
-  const [updateCart, { data, loading, error, client }] = useMutation(updateCartMutation());
-  const { nfts } = useContext(CartContext);
-  const [storeUpdateValue, setStoreUpdateValue] = useState<UpdateCartInput>({} as UpdateCartInput);
-  const { addCartData, removeCartData } = useContext(CartContext);
+  const [updateCart, { error }] = useMutation(updateCartMutation());
+  const { addCartData, removeCartData, resetToPrevious } = useContext(CartContext);
 
-  if (storeUpdateValue?.type && error) {
-    setTimeout(() => {
-      if (storeUpdateValue.type === UpdateCartType.Remove) {
-        addCartData(nft);
-      } else {
-        removeCartData(nft);
-      }
-    }, 800);
-    setStoreUpdateValue({} as UpdateCartInput);
-  }
-
-  useEffect(() => {
-    console.log(client);
-  })
   return (
     <TouchableOpacity disabled={disabled} onPress={onPress}>
       <NFTCardContainer hasBorder>
@@ -76,37 +60,49 @@ export const NFTCard = (props: NFTCardProps) => {
           <NFTCardText>{nft?.collection?.name}</NFTCardText>
           {!hideDescription && <NFTCardText>{nft.description}</NFTCardText>}
           {!hidePrice && <NFTCardText isBold>{nft.price.label}</NFTCardText>}
-          { !hideAddButton &&
+          {!hideAddButton &&
             <AddCartContainer hasPadding>
-                <CartButton
-                  onPress={async () => {
-                    onPressAddCart && onPressAddCart();
+              <CartButton
+                onPress={async () => {
+                  onPressAddCart && onPressAddCart();
+                  try {
                     addCartData(nft, async () => {
-                      const variables = buildUpdatCartVariables(UpdateCartType.Add, nft);
-                      setStoreUpdateValue(variables.updateCart);
-                      await updateCart({ variables });
+                      const variables = buildUpdatCartVariables(nft, UpdateCartType.Add);
+                      await updateCart({ variables })
+                        .catch((err) => {
+                          removeCartData(nft);
+                          showMessage(err?.message ?? err, true);
+                        });
                     });
-                  }}
-                >
-                  <CartButtonText>{"Add to cart"}</CartButtonText>
-                </CartButton>
+
+                  } catch (err: any) {
+                    showMessage(err?.message ?? err, true);
+                    console.log('errrrr ====> ', err);
+                  }
+                }}
+              >
+                <CartButtonText>{"Add to cart"}</CartButtonText>
+              </CartButton>
             </AddCartContainer>
           }
-          { showRemoveButton &&
+          {showRemoveButton &&
             <AddCartContainer hasPadding>
-                <CartButton
-                  bgColor={"#E13000"}
-                  onPress={() => {
-                    onPressRemoveCart && onPressRemoveCart();
-                    const variables = buildUpdatCartVariables(UpdateCartType.Remove, nft);
-                    removeCartData(nft, async () => {
-                      setStoreUpdateValue(variables.updateCart);
-                      await updateCart({ variables });
-                    });
-                  }}
-                >
-                  <CartButtonText>{"Remove"}</CartButtonText>
-                </CartButton>
+              <CartButton
+                bgColor={"#E13000"}
+                onPress={() => {
+                  onPressRemoveCart && onPressRemoveCart();
+                  const variables = buildUpdatCartVariables(nft, UpdateCartType.Remove);
+                  removeCartData(nft, async () => {
+                    await updateCart({ variables })
+                      .catch((err) => {
+                        showMessage(err?.message ?? err, true);
+                        resetToPrevious();
+                      });
+                  });
+                }}
+              >
+                <CartButtonText>{"Remove"}</CartButtonText>
+              </CartButton>
             </AddCartContainer>
           }
         </NFTCardContent>

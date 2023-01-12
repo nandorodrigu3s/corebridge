@@ -1,3 +1,4 @@
+import Toast from "react-native-toast-message";
 import { UpdateCartType } from "../../graphql/types";
 import { NFTData } from "../../system/interfaces/common.interfaces";
 
@@ -32,11 +33,19 @@ export const getPrices =  (toBuy: NFTData[]): string => {
   return formatter.format(price);
 }
 
-export const buildUpdatCartVariables = (type: UpdateCartType, nft: NFTData) => {
+export const buildUpdatCartVariables = (nft: NFTData, type: UpdateCartType) => {
   return {
     updateCart: {
       nft,
       type
     }
   };
+}
+
+export const showMessage = (message: string, isError = false) => {
+  Toast.show({
+    type: isError ? 'error' : 'success',
+    text1: isError ? 'Oops' : 'Yahooy!',
+    text2:  `${message}`
+  });
 }

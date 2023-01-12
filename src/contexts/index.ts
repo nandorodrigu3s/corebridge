@@ -40,6 +40,7 @@ export interface ICartContext {
   addCartData: (nftData: NFTData, successCallback?: () => void) => void;
   removeCartData: (nftData: NFTData, successCallback?: () => void) => void;
   clearCartData: (successCallback?: () => void) => void;
+  resetToPrevious: (successCallback?: () => void) => void;
 }
 
 export const CartContext = createContext<CartData & ICartContext>({
@@ -48,6 +49,7 @@ export const CartContext = createContext<CartData & ICartContext>({
   addCartData: (nftData: NFTData, successCallback?: () => void) => {},
   removeCartData: (nftData: NFTData, successCallback?: () => void) => {},
   clearCartData: (successCallback?: () => void) => {},
+  resetToPrevious: (successCallback?: () => void) => {},
 });
 
 //BACKDROP

@@ -50,8 +50,23 @@ function CartProvider({ children }: any) {
     successCallback && successCallback();
   }
 
+  const resetToPrevious = (successCallback?: () => void): void => {
+    setCartValues(cartValues);
+    successCallback && successCallback();
+  }
+
   return (
-    <CartContext.Provider value={{...cartValues, ...{addCartData, removeCartData, clearCartData}}}>
+    <CartContext.Provider value={
+      {
+        ...cartValues,
+        ...{
+          addCartData,
+          removeCartData,
+          clearCartData,
+          resetToPrevious
+        }
+      }
+    }>
       {children}
     </CartContext.Provider>
   )

@@ -6,9 +6,7 @@ import { NFTCardList } from "../../components/organ/organ.nft-list/nft-list.orga
 import { constData } from "../../system/constants";
 
 const Home = () => {
-  const onPress = () => {
-    console.log("estoy aqui");
-  }
+  const onPress = () => {}
 
   return (
     <SafeAreaView>

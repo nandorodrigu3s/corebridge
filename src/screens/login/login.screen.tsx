@@ -38,7 +38,7 @@ const Login = React.memo((props: LoginProps) => {
       password: '',
     }
   });
-  const [login, { data, loading, error , reset } ] = useMutation(loginMutation(['id', 'num_sales']), {
+  const [login, { data, loading, error } ] = useMutation(loginMutation(['id', 'num_sales']), {
     fetchPolicy: 'no-cache'
   });
   

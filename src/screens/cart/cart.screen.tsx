@@ -14,16 +14,21 @@ import { getPrices, handleSubmitPayment } from "./cart.repository";
 
 
 const Cart = () => {
+  const cartData = useContext(CartContext);
+  const { nfts } = cartData;
+  const  { isLogged } = useContext(UserContext);
   const [totalPrice, setTotalPrice] = useState<string>('0');
   const [loadingButton, setLoadingButton] = useState(false);
-  const cartData = useContext(CartContext);
-  const  { isLogged } = useContext(UserContext);
   const { navigate } = useNavigation<NativeStackNavigationProp<ParamListBase>>();
-  const { nfts } = cartData;
+  const [nftsData, setNFTsData] = useState(nfts);
   useEffect(() => {
     const totalPrice = getPrices(nfts);
     setTotalPrice(totalPrice);
   });
+
+  useEffect(() => {
+    nftsData
+  },[nftsData]);
 
   return (
     <SafeAreaView>

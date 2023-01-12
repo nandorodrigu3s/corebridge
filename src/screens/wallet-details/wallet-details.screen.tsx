@@ -11,9 +11,7 @@ interface WalletDetailsProps {
   nfts?: NFTData[];
 }
 const WalletDetails = (props: WalletDetailsProps) => {
-  const onPress = () => {
-    console.log("estoy aqui");
-  }
+  const onPress = () => {}
   return (
     <SafeAreaView>
       <Container hasPadding hasBorder>
