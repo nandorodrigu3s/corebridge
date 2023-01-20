@@ -24,7 +24,7 @@ export const ApolloAuthProvider = ({ children }: ApolloAuthProviderProps) => {
   // Ensure that the client is only created once.
 
   const client = useMemo(() => {
-    const httpLink = new HttpLink({ uri: `${process.env.BASE_URL}graphql` });
+    const httpLink = new HttpLink({ uri: `${process.env.GQL_BASE_URL}` });
 
     const authMiddleware = new ApolloLink((operation, forward) => {
       // add the authorization to the headers
