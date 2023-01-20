@@ -1,4 +1,4 @@
-import { Price } from "../../system/interfaces/common.interfaces";
+import { Price } from "../../../system/interfaces/common.interfaces";
 
 export interface PaymentModel {
   totalPrice: Price;
