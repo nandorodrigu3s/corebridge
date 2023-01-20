@@ -1,34 +1,61 @@
+import { useMutation } from "@apollo/client";
 import { ParamListBase, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React, { useContext, useEffect, useState } from "react";
-import { ActivityIndicator } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Toast from "react-native-toast-message";
 import { Container } from "../../components/atoms/atm.containers/container.atm.styled";
-import { SubmitButtonText } from "../../components/atoms/atm.submit-button/submit-button-text.atm.styled";
-import { SubmitButton } from "../../components/atoms/atm.submit-button/submit-button.atm.styled";
 import { NothingHere } from "../../components/mols/mol.nothing-here/nothing-here.mol";
+import { SubmitButtonComponent } from "../../components/mols/mol.submit-button/submit-button.mol";
 import { TotalCartComponent } from "../../components/mols/mol.total-cart/total-cart.mol";
 import { CartNFTList } from "../../components/organ/organ.cart-nft-list/cart-nft-list.organ";
-import { CartContext, UserContext } from "../../contexts";
-import { getPrices, handleSubmitPayment } from "./cart.repository";
+import { BackdropContext, CartContext, UserContext } from "../../contexts";
+import { createOrderMutation } from "../../graphql/mutations/create-order.mutation.graphql";
+import { buildOrderVariables, handleSubmitPayment } from "./cart.repository";
+import { CreateOrder } from "./interfaces/create-order-input";
 
 
 const Cart = () => {
   const cartData = useContext(CartContext);
-  const { nfts } = cartData;
+  const { nfts, totalPrice } = cartData;
   const  { isLogged } = useContext(UserContext);
-  const [totalPrice, setTotalPrice] = useState<string>('0');
   const [loadingButton, setLoadingButton] = useState(false);
   const { navigate } = useNavigation<NativeStackNavigationProp<ParamListBase>>();
-  const [nftsData, setNFTsData] = useState(nfts);
-  useEffect(() => {
-    const totalPrice = getPrices(nfts);
-    setTotalPrice(totalPrice);
+  const { setVisible } = useContext(BackdropContext);
+
+  const [createOrder, { loading, error, client } ] = useMutation(createOrderMutation(), {
+    fetchPolicy: 'no-cache'
   });
 
-  useEffect(() => {
-    nftsData
-  },[nftsData]);
+  const setLoads = (isLoading) => {
+    setLoadingButton(isLoading);
+    setVisible(isLoading);
+  }
+
+  const handleSubmit = () => {
+    const variables = buildOrderVariables(cartData);
+    setLoads(true);
+    createOrder({variables})
+    .then(({ data }) => {
+      console.log("dataaaaaaaaaaaaaaa ====> ", data);
+      handleSubmitPayment({ isLogged, navigate },
+        () => {
+          setLoads(false);
+        }
+      );
+    })
+    .catch((orderError) => {
+      setLoads(false);
+      setTimeout(() => {
+        Toast.show({
+          type: 'error',
+          text1: 'Oops',
+          text2:  `${error?.message ?? orderError?.message}`
+        });
+      }, 2000);
+      console.log("error in the order ============> ", client);
+    });
+  }
 
   return (
     <SafeAreaView>
@@ -39,27 +66,18 @@ const Cart = () => {
               cardsData={nfts ?? []}
             />
             <TotalCartComponent
-              totalPrice={`${totalPrice}`}
+              totalPrice={`${totalPrice.label}`}
             />
             <Container noFlex justifyCon alignIt>
-              <SubmitButton
-                onPress={() => {
-                  setLoadingButton(true);
-                  handleSubmitPayment({ isLogged, navigate }, () => {
-                      setLoadingButton(false);
-                    }
-                  );
-                }}
+              <SubmitButtonComponent
+                loadingButton={loadingButton}
+                onPress={handleSubmit}
+                labelFontSize={15}
                 buttonWidth={75}
                 alignIt
-              >
-                <SubmitButtonText fontSize={15}>
-                  { loadingButton
-                    ? <ActivityIndicator size={20} color="#FFF" />
-                    : "Finalizar Compra"
-                  }
-                </SubmitButtonText>
-              </SubmitButton>
+                loadingSize={20}
+                loadingColor="#FFF"
+              />
             </Container>
           </>
           : <NothingHere hideButton title={"Nenhum item no carrinho"} />

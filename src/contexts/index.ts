@@ -1,5 +1,5 @@
 import React, { createContext } from "react";
-import { NFTData, UserAuthData } from "../system/interfaces/common.interfaces";
+import { NFTData, Price, UserAuthData } from "../system/interfaces/common.interfaces";
 
 export interface User {
   token: string;
@@ -12,6 +12,8 @@ export interface User {
 export interface CartData {
   nfts: NFTData[],
   inCartCount: number;
+  totalPrice: Price;
+  discount: Price | null;
 }
 
 export interface CustomAppBackdrop {
@@ -46,6 +48,14 @@ export interface ICartContext {
 export const CartContext = createContext<CartData & ICartContext>({
   nfts: [],
   inCartCount: 0,
+  totalPrice: {
+    label: '',
+    value: 0
+  },
+  discount: {
+    label: '',
+    value: 0
+  },
   addCartData: (nftData: NFTData, successCallback?: () => void) => {},
   removeCartData: (nftData: NFTData, successCallback?: () => void) => {},
   clearCartData: (successCallback?: () => void) => {},

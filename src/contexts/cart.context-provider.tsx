@@ -1,14 +1,17 @@
 import React, { useState } from "react";
 import { Toast } from "react-native-toast-message/lib/src/Toast";
 import { CartContext, CartData } from ".";
-import { NFTData } from "../system/interfaces/common.interfaces";
+import { NFTData, Price } from "../system/interfaces/common.interfaces";
+import { getTotalPrice } from "../system/utils";
 
 
 
 function CartProvider({ children }: any) {
   const [cartValues, setCartValues] = useState<CartData>({
     nfts: [],
-    inCartCount: 0
+    inCartCount: 0,
+    discount: null,
+    totalPrice: getTotalPrice([])
   });
 
   const removeCartData = (nftData: NFTData, successCallback?: () => void): void => {
@@ -16,7 +19,9 @@ function CartProvider({ children }: any) {
     const counter = nfts.length;
     setCartValues({
       nfts,
-      inCartCount: counter
+      inCartCount: counter,
+      discount: null,
+      totalPrice: getTotalPrice(nfts)
     });
     successCallback && successCallback();
   }
@@ -24,18 +29,20 @@ function CartProvider({ children }: any) {
   const addCartData = (nftData: NFTData, successCallback?: () => void): void => {
     const isOnCart = cartValues.nfts.some(item => item.id === nftData.id);
     if (isOnCart) {
-        Toast.show({
-          type: 'error',
-          text1: 'Oops',
-          text2:  `O item | ${nftData.name} | já está no seu carrinho!`
-        });
+      Toast.show({
+        type: 'error',
+        text1: 'Oops',
+        text2: `O item | ${nftData.name} | já está no seu carrinho!`
+      });
       return;
     }
     const nfts = [...cartValues.nfts, nftData];
     const counter = nfts.length;
     setCartValues({
       nfts,
-      inCartCount: counter
+      inCartCount: counter,
+      discount: null,
+      totalPrice: getTotalPrice(nfts)
     });
     successCallback && successCallback();
   }
@@ -45,7 +52,9 @@ function CartProvider({ children }: any) {
     const counter = nfts.length;
     setCartValues({
       nfts,
-      inCartCount: counter
+      inCartCount: counter,
+      discount: null,
+      totalPrice: getTotalPrice(nfts)
     });
     successCallback && successCallback();
   }
@@ -54,6 +63,11 @@ function CartProvider({ children }: any) {
     setCartValues(cartValues);
     successCallback && successCallback();
   }
+
+  //TODO validate if it's necessary
+  const buildCartPrices = (nftData: NFTData[]) => {
+    return getTotalPrice(nftData);
+  };
 
   return (
     <CartContext.Provider value={
