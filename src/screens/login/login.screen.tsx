@@ -20,6 +20,7 @@ import Toast from "react-native-toast-message";
 interface LoginProps {
   routeName?: string;
 }
+
 type LoginFormData = {
   username: string;
   password: string;
@@ -38,7 +39,7 @@ const Login = React.memo((props: LoginProps) => {
       password: '',
     }
   });
-  const [login, { data, loading, error } ] = useMutation(loginMutation(['id', 'num_sales']), {
+  const [login, { error } ] = useMutation(loginMutation(['id', 'num_sales']), {
     fetchPolicy: 'no-cache'
   });
   
@@ -48,36 +49,34 @@ const Login = React.memo((props: LoginProps) => {
     }
   }, [authResponse]);
 
-  if (!loading && !authResponse?.token?.length && data?.login) {
-    const { __typename, ...auth } = data?.login;
-    setAuthResponse(auth);
-    setTimeout(() => {
-      setVisible(false);
-      navigation.navigate({ name: props?.route?.params?.routeName || 'Profile' } as never);
-    }, 3500);
-  }
-
   const onLogin = async (formData: LoginFormData) => {
-    try {
-      setVisible(true);
-      await login({
-        variables: {
-          authInput: {
-            username: formData.username,
-            password: formData.password,
-          }
+    setVisible(true);
+    await login({
+      variables: {
+        authInput: {
+          username: formData.username,
+          password: formData.password,
         }
-      });
-    } catch (onLoginErr: any) {
+      }
+    })
+    .then(({ data }) => {
+      const { __typename, ...auth } = data?.login;
+      setAuthResponse(auth);
+      setTimeout(() => {
+        setVisible(false);
+        navigation.navigate({ name: props?.route?.params?.routeName || 'Profile' } as never);
+      }, 1200);
+    })
+    .catch((onLoginErr) => {
       setTimeout(() => {
         Toast.show({
           type: 'error',
           text1: 'Oops',
-          text2:  `${error?.message}`
+          text2:  `${error?.message ?? onLoginErr?.message}`
         });
         setVisible(false);
       }, 2000);
-    }
+    });
   }
 
   return (

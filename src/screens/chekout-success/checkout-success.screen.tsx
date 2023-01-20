@@ -13,7 +13,7 @@ const CheckoutSuccess = () => {
   return (
     <CheckoutSuccessComponent
       title="Compra realizada com sucesso"
-      routeName="HomeTab"
+      routeName="Home"
       hasBorder
     />
   )

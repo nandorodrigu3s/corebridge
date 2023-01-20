@@ -24,7 +24,7 @@ const App = () => {
             <ApolloAuthProvider>
               <Stack.Navigator>
                 <Stack.Screen
-                  name="Home"
+                  name="HomeTab"
                   component={MyTabs}
                   options={{
                     headerShown: false,
