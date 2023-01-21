@@ -6,6 +6,7 @@ import Cart from "./src/screens/cart/cart.screen";
 import { CartContext } from "./src/contexts";
 import Profile from "./src/screens/profile/profile.screen";
 
+
 const Tabs = createBottomTabNavigator();
 
 function MyTabs () {
@@ -19,7 +20,7 @@ const cartValues = useContext(CartContext);
     >
       <Tabs.Screen
         component={Home}
-        name='HomeTab'
+        name='Home'
         options={{
           headerShown: false,
           tabBarLabel: 'Home',

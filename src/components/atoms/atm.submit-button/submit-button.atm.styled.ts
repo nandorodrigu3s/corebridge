@@ -2,7 +2,6 @@ import styled from "styled-components/native";
 
 interface SubmitButtonProps {
   bgColor?: string;
-  color?: string;
   radiusBorderValue?: number;
   buttonWidth?: number;
   hasLargePadding?: boolean;
