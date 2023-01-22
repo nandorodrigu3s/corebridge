@@ -3,7 +3,6 @@ import { ParamListBase, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React, { useContext, useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import Toast from "react-native-toast-message";
 import { Container } from "../../components/atoms/atm.containers/container.atm.styled";
 import { NothingHere } from "../../components/mols/mol.nothing-here/nothing-here.mol";
 import { SubmitButtonComponent } from "../../components/mols/mol.submit-button/submit-button.mol";
@@ -11,8 +10,8 @@ import { TotalCartComponent } from "../../components/mols/mol.total-cart/total-c
 import { CartNFTList } from "../../components/organ/organ.cart-nft-list/cart-nft-list.organ";
 import { BackdropContext, CartContext, UserContext } from "../../contexts";
 import { createOrderMutation } from "../../graphql/mutations/create-order.mutation.graphql";
+import { toastMessage } from "../../system/utils";
 import { buildOrderVariables, handleSubmitPayment } from "./cart.repository";
-import { CreateOrder } from "./interfaces/create-order-input";
 
 
 const Cart = () => {
@@ -27,7 +26,7 @@ const Cart = () => {
     fetchPolicy: 'no-cache'
   });
 
-  const setLoads = (isLoading) => {
+  const setLoads = (isLoading: boolean) => {
     setLoadingButton(isLoading);
     setVisible(isLoading);
   }
@@ -37,7 +36,6 @@ const Cart = () => {
     setLoads(true);
     createOrder({variables})
     .then(({ data }) => {
-      console.log("dataaaaaaaaaaaaaaa ====> ", data);
       handleSubmitPayment({ isLogged, navigate },
         () => {
           setLoads(false);
@@ -46,14 +44,8 @@ const Cart = () => {
     })
     .catch((orderError) => {
       setLoads(false);
-      setTimeout(() => {
-        Toast.show({
-          type: 'error',
-          text1: 'Oops',
-          text2:  `${error?.message ?? orderError?.message}`
-        });
-      }, 2000);
-      console.log("error in the order ============> ", client);
+      let message = error?.message ?? orderError?.message
+      toastMessage({ message });
     });
   }
 

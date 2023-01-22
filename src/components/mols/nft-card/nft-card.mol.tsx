@@ -39,7 +39,7 @@ export const NFTCard = (props: NFTCardProps) => {
     hideDescription,
     circle
   } = props;
-  const [updateCart, { error }] = useMutation(updateCartMutation());
+  const [updateCart, { error, client }] = useMutation(updateCartMutation());
   const { addCartData, removeCartData, resetToPrevious } = useContext(CartContext);
 
   return (
@@ -57,9 +57,15 @@ export const NFTCard = (props: NFTCardProps) => {
               {nft.name}
             </NFTCardText>
           </NFTCardContent>
-          <NFTCardText>{nft?.collection?.name}</NFTCardText>
-          {!hideDescription && <NFTCardText>{nft.description}</NFTCardText>}
-          {!hidePrice && <NFTCardText isBold>{nft.price.label}</NFTCardText>}
+          <NFTCardContent
+            containerWidth={90}
+            noMargin
+            noPadding
+          >
+            <NFTCardText isBold>{nft?.collection?.name}</NFTCardText>
+            {!hideDescription && <NFTCardText>{nft.description}</NFTCardText>}
+            {!hidePrice && <NFTCardText isBold>{nft.price.label}</NFTCardText>}
+          </NFTCardContent>
           {!hideAddButton &&
             <AddCartContainer hasPadding>
               <CartButton
@@ -70,6 +76,7 @@ export const NFTCard = (props: NFTCardProps) => {
                       const variables = buildUpdatCartVariables(nft, UpdateCartType.Add);
                       await updateCart({ variables })
                         .catch((err) => {
+                          console.log(client);
                           removeCartData(nft);
                           showMessage(err?.message ?? err, true);
                         });

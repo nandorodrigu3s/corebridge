@@ -38,7 +38,9 @@ export const ApolloAuthProvider = ({ children }: ApolloAuthProviderProps) => {
     })
 
     return new ApolloClient({
-      cache: new InMemoryCache(),
+      cache: new InMemoryCache({
+        addTypename: false
+      }),
       link: concat(authMiddleware, httpLink),
     });
   }, [])

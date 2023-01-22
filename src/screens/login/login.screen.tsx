@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Alert, Dimensions, Text, TextInput, TouchableOpacity } from "react-native";
+import { Dimensions } from "react-native";
 import { Container } from "../../components/atoms/atm.containers/container.atm.styled";
 import { useForm, Controller } from "react-hook-form";
 import { SubmitButton } from "../../components/atoms/atm.submit-button/submit-button.atm.styled";
@@ -14,8 +14,8 @@ import { useMutation } from "@apollo/client";
 import { loginMutation } from "../../graphql/mutations/login.mutation.graphql";
 import { BackdropContext, UserContext } from "../../contexts";
 import { useNavigation } from "@react-navigation/native";
-import { NFTData, UserAuthData } from "../../system/interfaces/common.interfaces";
-import Toast from "react-native-toast-message";
+import { UserAuthData } from "../../system/interfaces/common.interfaces";
+import { toastMessage } from "../../system/utils";
 
 interface LoginProps {
   routeName?: string;
@@ -68,12 +68,9 @@ const Login = React.memo((props: LoginProps) => {
       }, 1200);
     })
     .catch((onLoginErr) => {
+      let message = error?.message ?? onLoginErr?.message;
       setTimeout(() => {
-        Toast.show({
-          type: 'error',
-          text1: 'Oops',
-          text2:  `${error?.message ?? onLoginErr?.message}`
-        });
+        toastMessage({ message });
         setVisible(false);
       }, 2000);
     });
