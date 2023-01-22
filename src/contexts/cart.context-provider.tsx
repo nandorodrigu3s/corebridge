@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Toast } from "react-native-toast-message/lib/src/Toast";
 import { CartContext, CartData } from ".";
 import { NFTData, Price } from "../system/interfaces/common.interfaces";
-import { getTotalPrice } from "../system/utils";
+import { getTotalPrice, toastMessage } from "../system/utils";
 
 
 
@@ -29,11 +29,8 @@ function CartProvider({ children }: any) {
   const addCartData = (nftData: NFTData, successCallback?: () => void): void => {
     const isOnCart = cartValues.nfts.some(item => item.id === nftData.id);
     if (isOnCart) {
-      Toast.show({
-        type: 'error',
-        text1: 'Oops',
-        text2: `O item | ${nftData.name} | já está no seu carrinho!`
-      });
+      let message = `O item | ${nftData.name} | já está no seu carrinho!`;
+      toastMessage({ message });
       return;
     }
     const nfts = [...cartValues.nfts, nftData];

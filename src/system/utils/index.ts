@@ -1,4 +1,18 @@
-import { NFTData, Price } from "../interfaces/common.interfaces";
+import Toast from "react-native-toast-message";
+import { NFTData, Price, ToastMessageProps, ToastTypes } from "../interfaces/common.interfaces";
+
+
+export const toastMessage = ({
+  message = 'Desculpe, tivemos um problema por aqui. Tente mais tarde',
+  title = 'Oops',
+  type = ToastTypes.ERROR
+}: ToastMessageProps) => {
+  Toast.show({
+    type: type,
+    text1: title,
+    text2:  `${message}`
+  });
+}
 
 export const getTotalPriceLabel =  (ntfDataList: NFTData[]): string => {
   let price = 0;

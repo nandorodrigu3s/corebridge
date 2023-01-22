@@ -2,6 +2,16 @@ import { AuthData, User } from "../../graphql/types";
 
 export interface UserData extends User {}
 
+export enum ToastTypes {
+  ERROR = 'error',
+  SUCCESS = 'success'
+};
+export interface ToastMessageProps {
+  message?: string;
+  title?: string;
+  type?: ToastTypes;
+}
+
 export interface UserAuthData extends AuthData {
   wallet: NFTData[]
 }

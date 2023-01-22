@@ -156,6 +156,7 @@ export type Query = {
   getByUsername?: Maybe<User>;
   getCart?: Maybe<Cart>;
   getUser?: Maybe<User>;
+  listNFTs?: Maybe<Array<Maybe<NftData>>>;
 };
 
 

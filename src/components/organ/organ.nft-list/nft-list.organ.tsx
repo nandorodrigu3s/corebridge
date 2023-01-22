@@ -12,10 +12,10 @@ interface NFTCardListComponentProps {
   onPressAddCart?: () => void;
 }
 
-export const NFTCardList = (props: NFTCardListComponentProps) => {
+export const NFTCardList = React.memo((props: NFTCardListComponentProps) => {
   const { onPressAddCart, cardsData, hideAddButton } = props;
   const navigating = useNavigation();
-
+  console.log("alohaaaaaaaa =============+>>>");
   const pressCard = (item: NFTData) => {
     navigating.navigate(
       {
@@ -45,4 +45,4 @@ export const NFTCardList = (props: NFTCardListComponentProps) => {
       keyExtractor={item => (item.id).toString()}
     />
   )
-}
+});
