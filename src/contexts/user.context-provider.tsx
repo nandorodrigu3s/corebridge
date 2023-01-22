@@ -35,8 +35,17 @@ function UserProvider({ children }: any) {
     successCallback && successCallback();
   }
 
+  const updateUserWallet = (newWallet: NFTData[], successCallback?: () => void): void => {
+    const { nfts, ...rest} = user;
+    setUser({
+      ...rest,
+      nfts: newWallet,
+    });
+    successCallback && successCallback();
+  }
+
   return (
-    <UserContext.Provider value={{...user, addUserData, cleanUserData}}>
+    <UserContext.Provider value={{...user, addUserData, updateUserWallet, cleanUserData}}>
       {children}
     </UserContext.Provider>
   )

@@ -36,13 +36,13 @@ const Cart = () => {
     setLoads(true);
     createOrder({variables})
     .then(({ data }) => {
-      handleSubmitPayment({ isLogged, navigate },
-        () => {
-          setLoads(false);
-        }
+      handleSubmitPayment(
+        { isLogged, navigate },
+        () => setLoadingButton(false)
       );
     })
     .catch((orderError) => {
+      console.log("cliente checkout ==========> ", client)
       setLoads(false);
       let message = error?.message ?? orderError?.message
       toastMessage({ message });

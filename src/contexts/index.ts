@@ -24,6 +24,7 @@ export interface CustomAppBackdrop {
 //USER
 export interface IUserContext {
   addUserData: (userData: UserAuthData, successCallback?: () => void) => void;
+  updateUserWallet: (nfts: NFTData[], successCallback?: () => void) => void;
   cleanUserData: (successCallback?: () => void) => void;
 }
 
@@ -34,6 +35,7 @@ export const UserContext = createContext<User & IUserContext>({
   isLogged: false,
   nfts: [] as NFTData[],
   addUserData: (userData: UserAuthData, successCallback?: () => void) => {},
+  updateUserWallet: (nfts: NFTData[], successCallback?: () => void) => {},
   cleanUserData: (successCallback?: () => void) => {},
 });
 
