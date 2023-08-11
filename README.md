@@ -36,7 +36,7 @@ or
 
 2.1 - If you're going to run this project into iOS devices or simulators
 ```bash
- cd ios && pod install
+ cd ios && pod install & cd ..
 ```
 
 > If you're facing any issue to run into macOS environment, please follow this docs [Official macOS Docs](https://help.apple.com/xcode/mac/current/#/devfd9e28378)
